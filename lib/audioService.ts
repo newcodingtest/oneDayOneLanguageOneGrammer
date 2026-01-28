@@ -11,11 +11,15 @@ interface AudioServiceOptions {
 }
 
 class AudioService {
+  private currentAudio: HTMLAudioElement | null = null;
   private defaultOptions: AudioServiceOptions = {
-    lang: 'en-US',
-    rate: 0.9,
-    pitch: 1,
+    lang: 'en', // Google TTS는 'en-US' 대신 'en'을 기본으로 사용 가능
   };
+
+  private getGoogleTTSUrl(text: string, lang: string = 'en'): string{
+    const encodedText = encodeURIComponent(text);
+    return `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodedText}&tl=${lang}&client=tw-ob`;
+  }
 
   /**
    * 최고 품질의 음성 선택
@@ -69,40 +73,72 @@ class AudioService {
     });
   }
 
+async playV1(text: string, options?: AudioServiceOptions): Promise<void> {
+    return new Promise((resolve, reject) => {
+      // 1. 초기화 및 지원 확인
+      if (typeof window === 'undefined' || !window.speechSynthesis) {
+        return reject(new Error('지원하지 않는 브라우저입니다.'));
+      }
+      window.speechSynthesis.cancel();
+
+      const opts = { ...this.defaultOptions, ...options };
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = opts.lang || 'en-US';
+      utterance.rate = opts.rate || 0.9;
+
+      // 2. [핵심] 모바일에서 영어 발음을 강제하기 위한 음성 선택 로직
+      const voices = window.speechSynthesis.getVoices();
+      
+      // 영어 음성들만 필터링 (en-US, en-GB 등)
+      const enVoices = voices.filter(v => v.lang.startsWith('en'));
+      
+      // 모바일(Android/iOS)에서 품질이 좋은 엔진 순서대로 매칭
+      const selectedVoice = 
+        enVoices.find(v => v.name.includes('Google') && v.lang === 'en-US') ||
+        enVoices.find(v => v.name.includes('Apple') && v.lang === 'en-US') ||
+        enVoices.find(v => v.lang === 'en-US') ||
+        enVoices[0]; // 영어라면 아무거나
+
+      if (selectedVoice) {
+        utterance.voice = selectedVoice;
+      }
+
+      utterance.onend = () => resolve();
+      utterance.onerror = (e) => reject(e);
+
+      window.speechSynthesis.speak(utterance);
+    });
+  }
+
   /**
    * 재생 중지
    */
   stop(): void {
-    if (this.isSupported()) {
+ if (this.currentAudio) {
+      this.currentAudio.pause();
+      this.currentAudio.currentTime = 0;
+      this.currentAudio = null;
+    }
+    // 기존 Web Speech API도 혹시 모르니 중지
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
       window.speechSynthesis.cancel();
     }
   }
 
   /**
-   * 브라우저 지원 여부 확인
+   * 브라우저 지원 여부 확인 (HTML5 Audio 지원 확인)
    */
   isSupported(): boolean {
-    return 'speechSynthesis' in window;
+    return typeof Audio !== 'undefined';
   }
 
   /**
    * 사용 가능한 음성 목록 가져오기
    */
   async getAvailableVoices(): Promise<SpeechSynthesisVoice[]> {
-    return new Promise((resolve) => {
-      let voices = window.speechSynthesis.getVoices();
-
-      if (voices.length > 0) {
-        resolve(voices);
-      } else {
-        // 일부 브라우저는 비동기로 로드됨
-        window.speechSynthesis.onvoiceschanged = () => {
-          voices = window.speechSynthesis.getVoices();
-          resolve(voices);
-        };
-      }
-    });
+    return [];
   }
+
 }
 
 // 싱글톤 인스턴스

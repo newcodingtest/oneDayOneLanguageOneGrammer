@@ -6,6 +6,7 @@ import Footer from '@/components/Footer';
 import GrammarExplanation from '@/components/GrammarExplanation';
 import Header from '@/components/Header';
 import SentenceCard from '@/components/SentenceCard';
+import { audioService } from '@/lib/audioService'; // 경로 확인 필요
 import { useState } from 'react';
 
 interface ExampleSentence {
@@ -80,6 +81,27 @@ export default function DailyGrammarPage() {
     }
   };
 
+  // TTS 재생 함수 (Google TTS 사용)
+const playAudioV1 = async (text: string, id: number) => {
+  try {
+    // 1. 상태 업데이트 (재생 시작)
+    setIsPlaying(id);
+
+    // 2. 새로운 오디오 서비스 호출
+    // 기존의 복잡한 설정들을 audioService가 내부적으로 처리합니다.
+    await audioService.playV1(text, {
+      lang: 'en', // 'en-US'도 내부에서 처리하도록 되어있음
+      rate: 0.9
+    });
+
+    // 3. 재생이 정상적으로 끝나면 상태 초기화
+    setIsPlaying(null);
+  } catch (error) {
+    console.error("재생 중 오류 발생:", error);
+    setIsPlaying(null);
+  }
+};
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
       {/* Header - 완전 반응형 */}
@@ -97,7 +119,7 @@ export default function DailyGrammarPage() {
           sentence={lesson.sentence}
           translation={lesson.sentenceTranslation}
           isPlaying={isPlaying===0?true:false}
-          onPlay={() => playAudio(lesson.sentence, 0)}
+          onPlay={() => playAudioV1(lesson.sentence, 0)}
         />  
 
         {/* Grammar Explanation - 반응형 레이아웃 */}
@@ -112,7 +134,7 @@ export default function DailyGrammarPage() {
         <ExampleSentences
           examples={lesson.examples}
           playingId={isPlaying}
-          onPlay={(text, id) => playAudio(text, id)}
+          onPlay={(text, id) => playAudioV1(text, id)}
         />
       </main>
 
