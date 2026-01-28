@@ -1,6 +1,6 @@
 // hooks/useGrammarLesson.ts
 
-import { GrammarLesson } from '@/types/grammar';
+import { GrammarLesson } from '@/types/grammer';
 import { useEffect, useState } from 'react';
 
 export function useGrammarLesson(day: number) {
