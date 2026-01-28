@@ -84,11 +84,20 @@ async playV1(text: string, options?: AudioServiceOptions): Promise<void> {
       const opts = { ...this.defaultOptions, ...options };
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = opts.lang || 'en-US';
-      utterance.rate = opts.rate || 0.9;
+
+      const isMobile = this.checkIsMobile();
+      if(isMobile){
+        // 모바일: 먹먹함을 줄이기 위해 피치를 높이고 속도를 조절
+        utterance.rate = options?.rate || 0.85; // 조금 더 천천히
+        utterance.pitch = 1.2;  // 음높이를 올려서 선명도 확보
+      } else {
+        // PC: 기존에 만족하셨던 설정값 유지
+        utterance.rate = options?.rate || 0.9;
+        utterance.pitch = options?.pitch || 1.0;
+      }
 
       // 2. [핵심] 모바일에서 영어 발음을 강제하기 위한 음성 선택 로직
       const voices = window.speechSynthesis.getVoices();
-      
       // 영어 음성들만 필터링 (en-US, en-GB 등)
       const enVoices = voices.filter(v => v.lang.startsWith('en'));
       
@@ -125,6 +134,8 @@ async playV1(text: string, options?: AudioServiceOptions): Promise<void> {
     }
   }
 
+
+
   /**
    * 브라우저 지원 여부 확인 (HTML5 Audio 지원 확인)
    */
@@ -137,6 +148,14 @@ async playV1(text: string, options?: AudioServiceOptions): Promise<void> {
    */
   async getAvailableVoices(): Promise<SpeechSynthesisVoice[]> {
     return [];
+  }
+
+  /**
+   * 현재 기기가 모바일인지 확인
+   */
+ private checkIsMobile(): boolean {
+    if (typeof window === 'undefined') return false;
+    return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
   }
 
 }
