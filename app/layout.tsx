@@ -1,3 +1,4 @@
+import { Analytics } from '@vercel/analytics/react';
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -55,13 +56,14 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
-        {/* 모든 페이지에 공통으로 들어가는 구조화 데이터 */}
+        <Analytics />
+        {/* 모든 페이지에 공통으로 들어가는 구조화 데이터(SEO) */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
-              "@type": "WebSite", // 이벤트보다는 웹사이트 자체가 더 적절할 수 있습니다
+              "@type": "WebSite", 
               "name": "하루 한번 영어",
               "url": "https://one-day-one-language-one-grammer-qa.vercel.app/",
               "potentialAction": {
