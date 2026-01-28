@@ -31,6 +31,17 @@ export const metadata: Metadata = {
     locale: "ko_KR",
     type: "website",
   },
+
+  //SEO 설정
+  icons: {
+    icon: '/favicon.ico',
+    apple: '/oneDay.png',
+  },
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1, // 모바일에서 줌 고정 (앱 같은 느낌을 줌)
+  },
 };
 
 export default function RootLayout({
@@ -44,7 +55,26 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
+        {/* 모든 페이지에 공통으로 들어가는 구조화 데이터 */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite", // 이벤트보다는 웹사이트 자체가 더 적절할 수 있습니다
+              "name": "하루 한번 영어",
+              "url": "https://one-day-one-language-one-grammer-qa.vercel.app/",
+              "potentialAction": {
+                "@type": "SearchAction",
+                "target": "https://one-day-one-language-one-grammer-qa.vercel.app/search?q={search_term_string}",
+                "query-input": "required name=search_term_string"
+              }
+            }),
+          }}
+        />
       </body>
     </html>
   );
 }
+
+
