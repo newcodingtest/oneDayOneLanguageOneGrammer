@@ -108,11 +108,11 @@ export default function DailyGrammarPage() {
         />
 
         {/* Example Sentences - 완전 반응형 카드 */}
-        
+    
         <ExampleSentences
           examples={lesson.examples}
           playingId={isPlaying}
-          onPlay={() => playAudio(lesson.sentence, 0)}
+          onPlay={(text, id) => playAudio(text, id)}
         />
       </main>
 
