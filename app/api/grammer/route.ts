@@ -4,7 +4,10 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextRequest, NextResponse } from 'next/server';
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
-
+// ✅ 서버 캐시 유효 시간 설정 (단위: 초)
+// 86400초 = 24시간
+export const revalidate = 86400;
+export const dynamic = 'force-static'; // 이 파일은 무조건 정적 결과물로 취급해!
 
 export const askGemini = async (prompt: string) => {
   console.log("gemini model: ", process.env.GEMINI_MODEL as string);
