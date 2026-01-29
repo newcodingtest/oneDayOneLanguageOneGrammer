@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     siteName: "OneDay-OneGrammar",
     images: [
       {
-        url: "/oneDay.png", // public 폴더에 저장한 이미지 경로
+        url: "/oneDayV1.png", // public 폴더에 저장한 이미지 경로
         width: 1200,
         height: 630,
         alt: "서비스 썸네일",

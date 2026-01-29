@@ -25,15 +25,35 @@ interface GrammarLesson {
 
 export default function DailyGrammarPage() {
   const [isPlaying, setIsPlaying] = useState<number | null>(null);
+  const day = new Date().getDate();
+
+  const storageKey = `grammer_lesson_${day}`;
+
   // 1. SWR로 통합 (useState, useEffect, fetchGrammarLesson 모두 대체)
   // 페이지 진입 시 자동으로 /api/grammar?day=1을 호출합니다.
-  const day = new Date().getDate();
   console.log(day);
-  const { data: lesson, error, isLoading } = useSWR<GrammarLesson>('/api/grammer?day='+day, fetcher,{
-    revalidateOnFocus: false, // 창을 다시 클릭했을 때 자동 요청 방지
-  revalidateOnReconnect: false, // 인터넷 연결 시 자동 요청 방지
-  dedupingInterval: 600000, // 10분 동안은 같은 요청을 보내지 않고 캐시 사용
-  });
+  const { data: lesson, error, isLoading } = useSWR<GrammarLesson>('/api/grammer?day='+day, async(url) => {
+    
+    const cached = localStorage.getItem(storageKey);
+    if(cached){
+      console.log("로컬스토리지 캐시 사용");
+      return JSON.parse(cached);
+    }
+    console.log("API 호출");
+    const res = await fetcher(url);
+    localStorage.setItem(storageKey, JSON.stringify(res));
+    return res;
+  },
+  {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      revalidateIfStale: false,
+      // 새로고침 시 화면 깜빡임을 방지하기 위해 fallbackData는 유지하는 것이 좋습니다.
+      fallbackData: typeof window !== 'undefined' 
+        ? JSON.parse(localStorage.getItem(storageKey) || 'null') 
+        : undefined
+  }
+  );
 
   // 2. TTS 재생 함수
   const playAudioV1 = async (text: string, id: number) => {
