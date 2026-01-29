@@ -5,7 +5,7 @@ export default function Footer() {
     <footer className="bg-white border-t border-gray-200 mt-8 sm:mt-10 lg:mt-12">
       <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6 py-4 sm:py-5 lg:py-6 text-center text-gray-600 text-xs sm:text-sm">
         <p>매일 하나씩 영어 문법을 마스터하세요 📚</p>
-        <p className="text-xs text-gray-500 mt-2">Powered by Claude AI</p>
+        <p className="text-xs text-gray-500 mt-2">Powered by Grammar</p>
       </div>
     </footer>
   );

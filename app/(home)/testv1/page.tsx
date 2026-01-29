@@ -28,8 +28,7 @@ export default function DailyGrammarPage() {
   // 1. SWR로 통합 (useState, useEffect, fetchGrammarLesson 모두 대체)
   // 페이지 진입 시 자동으로 /api/grammar?day=1을 호출합니다.
   const day = new Date().getDate();
-  console.log(day);
-  const { data: lesson, error, isLoading } = useSWR<GrammarLesson>('/api/grammer?day='+day, fetcher,{
+  const { data: lesson, error, isLoading } = useSWR<GrammarLesson>(`'/api/grammer?day=${day}'`, fetcher,{
     revalidateOnFocus: false, // 창을 다시 클릭했을 때 자동 요청 방지
   revalidateOnReconnect: false, // 인터넷 연결 시 자동 요청 방지
   dedupingInterval: 600000, // 10분 동안은 같은 요청을 보내지 않고 캐시 사용

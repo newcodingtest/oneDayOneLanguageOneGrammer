@@ -9,7 +9,7 @@ export interface GrammarLesson {
   examples: ExampleSentence[];
 }
 
-interface ExampleSentence {
+export interface ExampleSentence {
   id: number;
   text: string;
   translation: string;

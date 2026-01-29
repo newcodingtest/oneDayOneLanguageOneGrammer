@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   //SEO 설정
   icons: {
     icon: '/favicon.ico',
-    apple: '/oneDay.png',
+    apple: '/oneDayV1.png',
   },
   viewport: {
     width: 'device-width',
