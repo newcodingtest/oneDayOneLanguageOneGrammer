@@ -66,19 +66,22 @@ export const askGemini = async (prompt: string) => {
     ]
   };
 
-let lastFetched: number = 0;
-
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
-  const day = searchParams.get('day') || '1';
+const now = new Date();
 
+  const month: number = now.getMonth() + 1; // 0~11로 반환되므로 +1 필수
+  const day: number = now.getDate();        // 1~31일 반환
+  
+   console.log("get month: ", month);
+  console.log("get day: ", day);
   try {
     const prompt = `당신은 영어 문법 교육 전문가입니다. Day ${day}에 해당하는 영어 문법 학습 콘텐츠를 생성해주세요.
 
 다음 JSON 형식으로만 응답해주세요 (다른 설명 없이 JSON만):
 
 {
-  "date": "2026년 1월 ${day}일",
+  "date": "2026년 ${month}월 ${day}일",
   "day": ${day},
   "sentence": "긴 영어 예시 문장 (문법이 포함된)",
   "sentenceTranslation": "한글 번역",
@@ -115,13 +118,7 @@ export async function GET(request: NextRequest) {
 - 예시 문장은 실용적이고 다양한 상황을 포함해주세요
 - Day ${day}에 맞는 난이도와 주제를 선택해주세요`;
 
-    const now = Date.now();
-    // 1시간(3600000ms) 동안 서버 메모리에 보관
-    if(sampleLesson && (now - lastFetched < 3600000)){
-      return Response.json(sampleLesson)
-    }
     console.log("계속 api 요청한다");
-    lastFetched = now;
 
     const response = await askGemini(prompt);
     console.log("response: ", response);
