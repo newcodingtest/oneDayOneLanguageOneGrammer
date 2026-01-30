@@ -1,5 +1,5 @@
 import { Analytics } from '@vercel/analytics/react';
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -12,6 +12,13 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+
+// ✅ 별도의 viewport 상수로 분리해서 export 하세요
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1, 
+};
 
 export const metadata: Metadata = {
   title: "하루 한번 영어",
@@ -37,11 +44,6 @@ export const metadata: Metadata = {
   icons: {
     icon: '/favicon.ico',
     apple: '/oneDayV1.png',
-  },
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 1, // 모바일에서 줌 고정 (앱 같은 느낌을 줌)
   },
 };
 
