@@ -7,7 +7,9 @@
       "@/components/*": ["./components/*"],
       "@/hooks/*": ["./hooks/*"],
       "@/lib/*": ["./lib/*"],
-      "@/types/*": ["./types/*"]
+      "@/types/*": ["./types/*"],
+      "@/mocks/*": ["./mocks/*"],
+      "@/service/*": ["./service/*"]
     },
 
     "target": "ES2017",

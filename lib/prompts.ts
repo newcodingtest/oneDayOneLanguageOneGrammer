@@ -1,4 +1,4 @@
-export const KOREAN_LEARNING_PROMPT = (years: number, month: number, day: number) => `당신은 영어 문법 교육 전문가입니다. Day ${day}에 해당하는 영어 문법 학습 콘텐츠를 생성해주세요.
+export const ENGLISH_LEARNING_PROMPT = (years: number, month: number, day: number) => `당신은 영어 문법 교육 전문가입니다. Day ${day}에 해당하는 영어 문법 학습 콘텐츠를 생성해주세요.
 
 다음 JSON 형식으로만 응답해주세요 (다른 설명 없이 JSON만):
 
