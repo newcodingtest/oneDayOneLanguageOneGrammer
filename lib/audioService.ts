@@ -37,42 +37,6 @@ class AudioService {
     );
   }
 
-  /**
-   * 텍스트를 음성으로 재생
-   */
-  async play(text: string, options?: AudioServiceOptions): Promise<void> {
-    return new Promise((resolve, reject) => {
-      if (!this.isSupported()) {
-        reject(new Error('Browser does not support speech synthesis'));
-        return;
-      }
-
-      const opts = { ...this.defaultOptions, ...options };
-
-      // 이전 재생 중지
-      window.speechSynthesis.cancel();
-
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = opts.lang || 'en-US';
-      utterance.rate = opts.rate || 0.9;
-      utterance.pitch = opts.pitch || 1;
-
-      // 최고 품질 음성 선택
-      const voice = this.selectBestVoice(utterance.lang);
-      if (voice) {
-        utterance.voice = voice;
-      }
-
-      utterance.onend = () => resolve();
-      utterance.onerror = (error) => {
-        console.error('Speech synthesis error:', error);
-        reject(error);
-      };
-
-      window.speechSynthesis.speak(utterance);
-    });
-  }
-
 async playV1(text: string, options?: AudioServiceOptions): Promise<void> {
     return new Promise((resolve, reject) => {
       // 1. 초기화 및 지원 확인
@@ -87,26 +51,31 @@ async playV1(text: string, options?: AudioServiceOptions): Promise<void> {
 
       const isMobile = this.checkIsMobile();
       if(isMobile){
-        // 모바일: 먹먹함을 줄이기 위해 피치를 높이고 속도를 조절
-        utterance.rate = options?.rate || 0.85; // 조금 더 천천히
-        utterance.pitch = 1.2;  // 음높이를 올려서 선명도 확보
+        utterance.rate = options?.rate || 1.0;  // 0.85보다 1.0이 더 선명할 수 있습니다.
+        utterance.pitch = 1.0;                 // 피치를 올리지 말고 기본값 유지
+        utterance.volume = 1.0;                // 볼륨 강제 최대화
       } else {
         // PC: 기존에 만족하셨던 설정값 유지
         utterance.rate = options?.rate || 0.9;
         utterance.pitch = options?.pitch || 1.0;
       }
-
-      // 2. [핵심] 모바일에서 영어 발음을 강제하기 위한 음성 선택 로직
+      // 2. [iOS 핵심] Samantha 또는 Samantha (Enhanced) 찾기
+      // iOS에서 가장 선명한 영어 목소리는 'Samantha'
       const voices = window.speechSynthesis.getVoices();
-      // 영어 음성들만 필터링 (en-US, en-GB 등)
-      const enVoices = voices.filter(v => v.lang.startsWith('en'));
-      
-      // 모바일(Android/iOS)에서 품질이 좋은 엔진 순서대로 매칭
-      const selectedVoice = 
-        enVoices.find(v => v.name.includes('Google') && v.lang === 'en-US') ||
-        enVoices.find(v => v.name.includes('Apple') && v.lang === 'en-US') ||
-        enVoices.find(v => v.lang === 'en-US') ||
-        enVoices[0]; // 영어라면 아무거나
+
+      let selectedVoice = null;
+      if (isMobile) {
+        // 1순위: Enhanced(고품질) 사만다, 2순위: 일반 사만다, 3순위: 그외 영어
+        selectedVoice = 
+          voices.find(v => v.name.includes('Samantha') && v.name.includes('Enhanced')) ||
+          voices.find(v => v.name.includes('Samantha')) ||
+          voices.find(v => v.lang.startsWith('en-US')) ||
+          voices.find(v => v.lang.startsWith('en'));
+      } else {
+        selectedVoice = 
+          voices.find(v => v.name.includes('Google') && v.lang === 'en-US') ||
+          voices.find(v => v.lang === 'en-US');
+      }
 
       if (selectedVoice) {
         utterance.voice = selectedVoice;
