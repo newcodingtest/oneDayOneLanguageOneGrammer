@@ -38,55 +38,70 @@ class AudioService {
   }
 
 async play(text: string, options?: AudioServiceOptions): Promise<void> {
-    return new Promise((resolve, reject) => {
-      // 1. 초기화 및 지원 확인
-      if (typeof window === 'undefined' || !window.speechSynthesis) {
-        return reject(new Error('지원하지 않는 브라우저입니다.'));
-      }
-      window.speechSynthesis.cancel();
+  return new Promise((resolve, reject) => {
+    if (typeof window === 'undefined' || !window.speechSynthesis) {
+      return reject(new Error('지원하지 않는 브라우저입니다.'));
+    }
+    window.speechSynthesis.cancel();
 
-      const opts = { ...this.defaultOptions, ...options };
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = opts.lang || 'en-US';
+    const utterance = new SpeechSynthesisUtterance(text);
+    const voices = window.speechSynthesis.getVoices();
+    
+    // 기기 판별
+    const ua = navigator.userAgent.toLowerCase();
+    const isIOS = /iphone|ipad|ipod/.test(ua);
+    const isAndroid = /android/.test(ua);
 
-      const isMobile = this.checkIsMobile();
-      if(isMobile){
-        utterance.rate = options?.rate || 1.0;  // 0.85보다 1.0이 더 선명할 수 있습니다.
-        utterance.pitch = 1.0;                 // 피치를 올리지 말고 기본값 유지
-        utterance.volume = 1.0;                // 볼륨 강제 최대화
-      } else {
-        // PC: 기존에 만족하셨던 설정값 유지
-        utterance.rate = options?.rate || 0.9;
-        utterance.pitch = options?.pitch || 1.0;
-      }
-      // 2. [iOS 핵심] Samantha 또는 Samantha (Enhanced) 찾기
-      // iOS에서 가장 선명한 영어 목소리는 'Samantha'
-      const voices = window.speechSynthesis.getVoices();
+    // 1. 기기별 엔진 최적화 파라미터
+    if (isIOS) {
+      utterance.rate = options?.rate || 1.0; 
+      utterance.pitch = 1.0; 
+    } else if (isAndroid) {
+      // 안드로이드는 0.9~1.0 속도에서 가장 선명함
+      utterance.rate = options?.rate || 0.9;
+      utterance.pitch = 1.0;
+    } else {
+      utterance.rate = options?.rate || 0.9;
+      utterance.pitch = options?.pitch || 1.0;
+    }
 
-      let selectedVoice = null;
-      if (isMobile) {
-        // 1순위: Enhanced(고품질) 사만다, 2순위: 일반 사만다, 3순위: 그외 영어
-        selectedVoice = 
-          voices.find(v => v.name.includes('Samantha') && v.name.includes('Enhanced')) ||
-          voices.find(v => v.name.includes('Samantha')) ||
-          voices.find(v => v.lang.startsWith('en-US')) ||
-          voices.find(v => v.lang.startsWith('en'));
-      } else {
-        selectedVoice = 
-          voices.find(v => v.name.includes('Google') && v.lang === 'en-US') ||
-          voices.find(v => v.lang === 'en-US');
-      }
+    utterance.lang = options?.lang || 'en-US';
 
-      if (selectedVoice) {
-        utterance.voice = selectedVoice;
-      }
+    // 2. 기기별 보이스 매칭 로직
+    let selectedVoice = null;
 
-      utterance.onend = () => resolve();
-      utterance.onerror = (e) => reject(e);
+    if (isIOS) {
+      // iOS 전용: Samantha
+      selectedVoice = 
+        voices.find(v => v.name.includes('Samantha') && v.name.includes('Enhanced')) ||
+        voices.find(v => v.name.includes('Samantha'));
+    } else if (isAndroid) {
+      // 안드로이드 전용: Google 영어 엔진 (퀄리티가 가장 좋음)
+      selectedVoice = 
+        voices.find(v => v.name.includes('Google') && v.lang.startsWith('en-US')) ||
+        voices.find(v => v.name.includes('Google') && v.lang.startsWith('en')) ||
+        voices.find(v => v.lang.startsWith('en-US'));
+    } else {
+      // PC: Google 크롬 기본 엔진 우선
+      selectedVoice = 
+        voices.find(v => v.name.includes('Google') && v.lang === 'en-US') ||
+        voices.find(v => v.lang === 'en-US');
+    }
 
+    if (selectedVoice) {
+      utterance.voice = selectedVoice;
+    }
+
+    utterance.onend = () => resolve();
+    utterance.onerror = (e) => reject(e);
+
+    // iOS 전용 딜레이 (안드로이드/PC는 즉시 실행)
+    const playDelay = isIOS ? 100 : 0;
+    setTimeout(() => {
       window.speechSynthesis.speak(utterance);
-    });
-  }
+    }, playDelay);
+  });
+}
 
   /**
    * 재생 중지
