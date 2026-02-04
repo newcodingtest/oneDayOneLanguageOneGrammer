@@ -37,7 +37,7 @@ class AudioService {
     );
   }
 
-async playV1(text: string, options?: AudioServiceOptions): Promise<void> {
+async play(text: string, options?: AudioServiceOptions): Promise<void> {
     return new Promise((resolve, reject) => {
       // 1. 초기화 및 지원 확인
       if (typeof window === 'undefined' || !window.speechSynthesis) {
