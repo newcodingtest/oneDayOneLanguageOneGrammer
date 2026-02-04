@@ -1,11 +1,13 @@
 # 하루 영어문법 1개 (Daily English Grammar)
 
 Next.js + TypeScript 기반의 **AI 자동 생성** 영어 문법 학습 웹 애플리케이션
+<Br>
+주소: https://one-day-one-language-one-grammer-qa.vercel.app/
 
 ## 주요 기능
 
 ✨ **AI가 매일 새로운 문법을 생성합니다**
-- 🤖 Claude AI API로 콘텐츠 자동 생성
+- 🤖 Gemini AI API로 콘텐츠 자동 생성
 - 📚 긴 영어 문장 예시 제공
 - 📖 상세한 문법 설명
 - 💬 3-4개의 실제 사용 예시 문장
@@ -32,12 +34,12 @@ Next.js + TypeScript 기반의 **AI 자동 생성** 영어 문법 학습 웹 애
 ## 🚀 빠른 시작
 
 ### 1. API 키 발급
-[Anthropic Console](https://console.anthropic.com/)에서 API 키를 발급받으세요.
+API 키를 발급받으세요.
 
 ### 2. 환경 변수 설정
 ```bash
 # .env.local 파일 생성
-ANTHROPIC_API_KEY=your_api_key_here
+API_KEY=your_api_key_here
 ```
 
 ### 3. 설치 및 실행

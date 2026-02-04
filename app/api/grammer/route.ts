@@ -1,4 +1,7 @@
 // app/api/grammar/route.ts
+import { ENGLISH_LEARNING_PROMPT } from "@/lib/prompts";
+import { getSampleLesson } from "@/mocks/grammar";
+import { supabaseService } from "@/service/databaseService";
 import { GrammarLesson } from "@/types/grammer";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextRequest, NextResponse } from 'next/server';
@@ -33,97 +36,34 @@ export const askGemini = async (prompt: string) => {
   }
 };
 
-  // 샘플 데이터
-  let sampleLesson: GrammarLesson = {
-    date: '2026년 1월 28일',
-    day: 28,
-    sentence: 'Having finished the project, she decided to take a well-deserved break.',
-    sentenceTranslation: '프로젝트를 마친 후, 그녀는 당연히 받아야 할 휴식을 취하기로 결정했다.',
-    grammarTitle: '분사 구문 (Participle Phrase)',
-    grammarExplanation: '완료 분사구문 "Having + p.p"는 주절의 동작보다 먼저 일어난 일을 나타냅니다. 시간, 이유, 조건 등을 나타낼 때 사용되며, 문장을 더 간결하고 세련되게 만들어줍니다.',
-    structure: 'Having + 과거분사, 주어 + 동사',
-    examples: [
-      {
-        id: 1,
-        text: 'Having lived in Korea for 10 years, he speaks Korean fluently.',
-        translation: '한국에서 10년을 살았기 때문에, 그는 한국어를 유창하게 말한다.'
-      },
-      {
-        id: 2,
-        text: 'Having completed all the tasks, we went home early.',
-        translation: '모든 업무를 완료한 후, 우리는 일찍 집에 갔다.'
-      },
-      {
-        id: 3,
-        text: 'Having studied hard, she passed the exam with flying colors.',
-        translation: '열심히 공부했기 때문에, 그녀는 시험에 훌륭하게 합격했다.'
-      },
-      {
-        id: 4,
-        text: 'Having never traveled abroad, I was nervous about the trip.',
-        translation: '해외여행을 한 번도 해본 적이 없어서, 나는 여행에 대해 긴장했다.'
-      }
-    ]
-  };
+
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
-const now = new Date();
-
+  const now = new Date();
+  const years: number = now.getFullYear();
   const month: number = now.getMonth() + 1; // 0~11로 반환되므로 +1 필수
   const day: number = now.getDate();        // 1~31일 반환
   
-   console.log("get month: ", month);
-  console.log("get day: ", day);
+    // 샘플 데이터
+  let sampleLesson: GrammarLesson = getSampleLesson(years, month, day);
   try {
-    const prompt = `당신은 영어 문법 교육 전문가입니다. Day ${day}에 해당하는 영어 문법 학습 콘텐츠를 생성해주세요.
+    const prompt = ENGLISH_LEARNING_PROMPT(years, month, day);
+    let response : string = "";
+    const isProd =  process.env.DEPLOY_LEVEL === 'prod'
+    if(isProd){
+      console.log("Prod 모드: 실제 api 요청한다");
+      const aiResponse = await askGemini(prompt);
+      response = aiResponse!;
 
-다음 JSON 형식으로만 응답해주세요 (다른 설명 없이 JSON만):
-
-{
-  "date": "2026년 ${month}월 ${day}일",
-  "day": ${day},
-  "sentence": "긴 영어 예시 문장 (문법이 포함된)",
-  "sentenceTranslation": "한글 번역",
-  "grammarTitle": "문법 이름 (한글과 영문)",
-  "grammarExplanation": "문법에 대한 상세한 설명 (2-3문장)",
-  "structure": "문법 구조 예시",
-  "examples": [
-    {
-      "id": 1,
-      "text": "예시 문장 1",
-      "translation": "한글 번역 1"
-    },
-    {
-      "id": 2,
-      "text": "예시 문장 2",
-      "translation": "한글 번역 2"
-    },
-    {
-      "id": 3,
-      "text": "예시 문장 3",
-      "translation": "한글 번역 3"
-    },
-    {
-      "id": 4,
-      "text": "예시 문장 4",
-      "translation": "한글 번역 4"
+    } else {
+      console.log("Dev 모드: 샘플 api 요청한다");
+      response = JSON.stringify(sampleLesson);
     }
-  ]
-}
 
-중요:
-- 매일 다른 문법을 다뤄주세요
-- 실제 원어민들이 자주 사용하는 자연스러운 문장을 만들어주세요
-- 예시 문장은 실용적이고 다양한 상황을 포함해주세요
-- Day ${day}에 맞는 난이도와 주제를 선택해주세요`;
+    supabaseService.save(response);
 
-    console.log("계속 api 요청한다");
-
-    const response = await askGemini(prompt);
-    console.log("response: ", response);
-    const data = await response as string;
-    
+    const data = response;
     // JSON 파싱 (```json 제거)
     const cleanContent = data.replace(/```json\n?|\n?```/g, '').trim();
     const grammarData = JSON.parse(cleanContent);
