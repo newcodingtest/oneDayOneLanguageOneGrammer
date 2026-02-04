@@ -1,7 +1,10 @@
+"use client";
+
 import { Analytics } from '@vercel/analytics/react';
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { useEffect } from 'react';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -52,6 +55,23 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+// ✅ 카카오톡 외부 브라우저 탈출 로직
+  useEffect(() => {
+    const userAgent = navigator.userAgent.toLowerCase();
+    const isKakao = userAgent.includes('kakaotalk');
+    const isAndroid = userAgent.includes('android');
+
+    if (isKakao && isAndroid) {
+      const currentUrl = window.location.href;
+      // 안드로이드 카톡 전용 외부 브라우저 실행 스키마
+      window.location.href = `kakaotalk://web/openExternal?url=${encodeURIComponent(currentUrl)}`;
+    }
+  }, []);
+
+
+
+
   return (
     <html lang="en">
       <body
