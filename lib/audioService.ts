@@ -38,83 +38,68 @@ class AudioService {
   }
 
 async play(text: string, options?: AudioServiceOptions): Promise<void> {
-  if (typeof window === 'undefined' || !window.speechSynthesis) {
-   throw new Error('지원하지 않는 브라우저입니다.');
-  }
+  return new Promise((resolve, reject) => {
+    if (typeof window === 'undefined' || !window.speechSynthesis) {
+      return reject(new Error('지원하지 않는 브라우저입니다.'));
+    }
+    window.speechSynthesis.cancel();
 
- // [핵심 1] 안드로이드 인앱뷰 탈출용 'Warm-up'
- // 비동기 로직으로 넘어가기 직전에 빈 소리를 즉시 실행합니다.
- const warmUp = new SpeechSynthesisUtterance("");
- window.speechSynthesis.speak(warmUp);
- return new Promise((resolve, reject) => {
-  window.speechSynthesis.cancel();
-  const utterance = new SpeechSynthesisUtterance(text);
-  let voices = window.speechSynthesis.getVoices();
+    const utterance = new SpeechSynthesisUtterance(text);
+    const voices = window.speechSynthesis.getVoices();
+    
+    // 기기 판별
+    const ua = navigator.userAgent.toLowerCase();
+    const isIOS = /iphone|ipad|ipod/.test(ua);
+    const isAndroid = /android/.test(ua);
 
-  const setupAndSpeak = () => {
-   // 기기 판별
-   const ua = navigator.userAgent.toLowerCase();
-   const isIOS = /iphone|ipad|ipod/.test(ua);
-   const isAndroid = /android/.test(ua);
-   // 1. 기기별 엔진 최적화 파라미터
-   if (isIOS) {
-​    utterance.rate = options?.rate || 1.0; 
-​    utterance.pitch = 1.0; 
-   } else if (isAndroid) {
-​    // 안드로이드는 0.9~1.0 속도에서 가장 선명함
-​    utterance.rate = options?.rate || 0.9;
-​    utterance.pitch = 1.0;
-   } else {
-​    utterance.rate = options?.rate || 0.9;
-​    utterance.pitch = options?.pitch || 1.0;
-   }
+    // 1. 기기별 엔진 최적화 파라미터
+    if (isIOS) {
+      utterance.rate = options?.rate || 1.0; 
+      utterance.pitch = 1.0; 
+    } else if (isAndroid) {
+      // 안드로이드는 0.9~1.0 속도에서 가장 선명함
+      utterance.rate = options?.rate || 0.9;
+      utterance.pitch = 1.0;
+    } else {
+      utterance.rate = options?.rate || 0.9;
+      utterance.pitch = options?.pitch || 1.0;
+    }
 
-   utterance.lang = options?.lang || 'en-US';
-   // 2. 기기별 보이스 매칭 로직
-   let selectedVoice = null;
-   if (isIOS) {
-​    // iOS 전용: Samantha
-​    selectedVoice = 
-​     voices.find(v => v.name.includes('Samantha') && v.name.includes('Enhanced')) ||
-​     voices.find(v => v.name.includes('Samantha'));
-   } else if (isAndroid) {
-​    // 안드로이드 전용: Google 영어 엔진 (퀄리티가 가장 좋음)
-​    selectedVoice = 
-​     voices.find(v => v.name.includes('Google') && v.lang.startsWith('en-US')) ||
-​     voices.find(v => v.name.includes('Google') && v.lang.startsWith('en')) ||
-​     voices.find(v => v.lang.startsWith('en-US'));
-   } else {
-​    // PC: Google 크롬 기본 엔진 우선
-​    selectedVoice = 
-​     voices.find(v => v.name.includes('Google') && v.lang === 'en-US') ||
-​     voices.find(v => v.lang === 'en-US');
-   }
-   if (selectedVoice) {
-​    utterance.voice = selectedVoice;
-   }
-   utterance.onend = () => resolve();
-   utterance.onerror = (e) => reject(e);
+    utterance.lang = options?.lang || 'en-US';
 
-   // [핵심 2] 안드로이드 전용 스피크 킥 (Pause-Resume Hack)
-​    // 특정 안드로이드 웹뷰에서 소리가 안 날 때 강제로 깨우는 방법입니다.
-​    window.speechSynthesis.speak(utterance);
+    // 2. 기기별 보이스 매칭 로직
+    let selectedVoice = null;
 
-​    if (isAndroid) {
-​     window.speechSynthesis.pause();
-​     setTimeout(() => {
-​      window.speechSynthesis.resume();
-​     }, 50);
-​    }
-   };
-   // voices가 아직 로드되지 않았다면 이벤트를 기다림
-   if (voices.length === 0) {
-​     window.speechSynthesis.onvoiceschanged = () => {
-​     voices = window.speechSynthesis.getVoices();
-​     setupAndSpeak();
-​    };
-   } else {
-​    setupAndSpeak();
-   }
+    if (isIOS) {
+      // iOS 전용: Samantha
+      selectedVoice = 
+        voices.find(v => v.name.includes('Samantha') && v.name.includes('Enhanced')) ||
+        voices.find(v => v.name.includes('Samantha'));
+    } else if (isAndroid) {
+      // 안드로이드 전용: Google 영어 엔진 (퀄리티가 가장 좋음)
+      selectedVoice = 
+        voices.find(v => v.name.includes('Google') && v.lang.startsWith('en-US')) ||
+        voices.find(v => v.name.includes('Google') && v.lang.startsWith('en')) ||
+        voices.find(v => v.lang.startsWith('en-US'));
+    } else {
+      // PC: Google 크롬 기본 엔진 우선
+      selectedVoice = 
+        voices.find(v => v.name.includes('Google') && v.lang === 'en-US') ||
+        voices.find(v => v.lang === 'en-US');
+    }
+
+    if (selectedVoice) {
+      utterance.voice = selectedVoice;
+    }
+
+    utterance.onend = () => resolve();
+    utterance.onerror = (e) => reject(e);
+
+        // iOS 전용 딜레이 (안드로이드/PC는 즉시 실행)
+    const playDelay = isIOS ? 100 : 0;
+    setTimeout(() => {
+      window.speechSynthesis.speak(utterance);
+    }, playDelay);
   });
 }
 
