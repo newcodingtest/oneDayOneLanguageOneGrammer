@@ -2,13 +2,13 @@
 
 Next.js + TypeScript 기반의 **AI 자동 생성** 영어 문법 학습 웹 애플리케이션
 <Br>
-주소: https://one-day-one-language-one-grammer-qa.vercel.app/
+주소: https://daliy-korean.vercel.app/
 
 ## 주요 기능
 
 ✨ **AI가 매일 새로운 문법을 생성합니다**
 - 🤖 Gemini AI API로 콘텐츠 자동 생성
-- 📚 긴 영어 문장 예시 제공
+- 📚 긴 한글 문장 예시 제공
 - 📖 상세한 문법 설명
 - 💬 3-4개의 실제 사용 예시 문장
 - 🔊 음성 발음 기능 (Web Speech API)
@@ -24,11 +24,11 @@ Next.js + TypeScript 기반의 **AI 자동 생성** 영어 문법 학습 웹 애
 
 ## 기술 스택
 
-- **Framework**: Next.js 14
+- **Framework**: Next.js 16
 - **Language**: TypeScript
-- **AI**: Claude API (Anthropic)
-- **Styling**: Tailwind CSS (완전 반응형)
-- **Icons**: 커스텀 SVG 아이콘 (외부 라이브러리 불필요)
+- **AI**: Gemini API 
+- **Styling**: Tailwind CSS 
+- **Icons**: 커스텀 SVG 아이콘
 - **TTS**: Web Speech API
 
 ## 🚀 빠른 시작
@@ -39,7 +39,12 @@ API 키를 발급받으세요.
 ### 2. 환경 변수 설정
 ```bash
 # .env.local 파일 생성
-API_KEY=your_api_key_here
+GEMINI_API_KEY=
+GEMINI_MODEL=
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY=
+DEPLOY_LEVEL=dev # dev, prod
+NEXT_PUBLIC_BASE_URL=
 ```
 
 ### 3. 설치 및 실행
@@ -89,7 +94,17 @@ daily-grammar-app/
 │   └── useAudioPlayer.ts         # 음성 재생 관리
 │
 ├── lib/                          # 유틸리티 & 서비스
-│   └── audioService.ts           # Web Speech API 서비스
+│   ├── audioService.ts           # Web Speech API 서비스
+│   ├── prompts.ts                # AI 프롬프트
+│   └── supabaseServer.ts         # Supabase 연결 정의
+│
+│
+├── mocks/
+│   └── grammar.ts                # Sample 문법 데이터 정의
+│
+├── service/
+│   └── databaseService.ts        # DB 서비스
+│
 │
 ├── types/                        # TypeScript 타입 정의
 │   └── grammar.ts                # GrammarLesson 인터페이스
@@ -355,50 +370,14 @@ Props를 통해 다양한 상황에 사용 가능
 
 ### 3. **관심사 분리**
 - **UI**: Components
-- **로직**: Hooks
-- **서비스**: Lib
+- **상태관리**: Hooks
+- **범용도구 및 외부 라이브러리**: Lib,
+- **서비스**: Service
 
 ### 4. **타입 안정성**
 모든 Props와 함수에 TypeScript 타입 정의
 
 ---
-
-## 🚀 확장 방법
-
-### 새로운 섹션 추가하기
-
-1. **컴포넌트 생성**
-```typescript
-// components/QuizSection.tsx
-interface QuizSectionProps {
-  questions: Question[];
-}
-
-export default function QuizSection({ questions }: QuizSectionProps) {
-  return <div>...</div>;
-}
-```
-
-2. **page.tsx에 추가**
-```typescript
-import QuizSection from '@/components/QuizSection';
-
-// ...
-<QuizSection questions={lesson.quiz} />
-```
-
-### 새로운 Hook 추가하기
-
-```typescript
-// hooks/useUserProgress.ts
-export function useUserProgress() {
-  const [progress, setProgress] = useState(0);
-  
-  // 로직...
-  
-  return { progress, updateProgress };
-}
-```
 
 ---
 
@@ -496,8 +475,6 @@ test('renders sentence', () => {
 ```
 
 ---
-
-**깔끔하고 확장 가능한 구조!** 🎉
 
 라이선스
 MIT
