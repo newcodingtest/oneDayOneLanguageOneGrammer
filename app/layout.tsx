@@ -1,8 +1,8 @@
+import KakaoRedirect from '@/components/KakaoRedirect';
 import { Analytics } from '@vercel/analytics/react';
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import KakaoRedirect from '@/components/KakaoRedirect';
 
 
 const geistSans = Geist({
@@ -56,7 +56,7 @@ export default function RootLayout({
 }>) {
 
   return (
-    <html lang="en">
+    <html lang="ko">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
