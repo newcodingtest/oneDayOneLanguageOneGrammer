@@ -2,7 +2,7 @@
 
 Next.js + TypeScript 기반의 **AI 자동 생성** 영어 문법 학습 웹 애플리케이션
 <Br>
-주소: https://daliy-korean.vercel.app/
+주소: https://daliy-english-sentence.vercel.app/
 
 ## 주요 기능
 
