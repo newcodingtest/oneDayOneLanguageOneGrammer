@@ -95,7 +95,7 @@ async play(text: string, options?: AudioServiceOptions): Promise<void> {
     utterance.onend = () => resolve();
     utterance.onerror = (e) => reject(e);
 
-        // iOS 전용 딜레이 (안드로이드/PC는 즉시 실행)
+   // iOS 전용 딜레이 (안드로이드/PC는 즉시 실행)
     const playDelay = isIOS ? 100 : 0;
     setTimeout(() => {
       window.speechSynthesis.speak(utterance);
