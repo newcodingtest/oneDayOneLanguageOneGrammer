@@ -35,7 +35,10 @@ export const ENGLISH_LEARNING_PROMPT = (years: number, month: number, day: numbe
 }
 
 중요:
-- 매일 다른 문법을 다뤄주세요
-- 실제 원어민들이 자주 사용하는 자연스러운 문장을 만들어주세요
-- 예시 문장은 실용적이고 다양한 상황을 포함해주세요
-- Day ${day}에 맞는 난이도와 주제를 선택해주세요`;
+- 1. 매일 다른 문법을 다뤄주세요
+- 2. Random Difficulty: Day ${day}에 상관없이 매일 다양한 난이도를 섞어 학습자가 지루하지 않게 해주세요.
+- 3. Beyond Textbooks: "I am fine, thank you" 같은 문장은 금지입니다. 대신 "I'm doing great", "Can't complain" 처럼 진짜 원어민의 반응을 넣어주세요.
+- 4. Hyper-Localization: 한국어 번역 시에도 20대들이 사용하는 '힙한 말투'를 적절히 섞어 학습 흥미를 높여주세요. (예: "That's cap" -> "그건 좀 에바지").
+- 5. Context is King: 상황(situation)을 구체적으로 설정하여 어떤 맥락에서 이 영어를 써야 할지 바로 이해하게 하세요
+- 6. Formatting: 반드시 유효한 JSON 형식이어야 합니다.
+`
