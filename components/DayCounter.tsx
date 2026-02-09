@@ -17,6 +17,11 @@ export default function DayCounter({ date, day }: DayCounterProps) {
             <span className="text-xs sm:text-sm">{date}</span>
           </div>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-blue-600">Day {day}</h2>
+          
+          {/* 🔊 안내 문구 */}
+          <p className="mt-1 text-xs sm:text-sm text-gray-500">
+            🔊 PC에서 접속하면 발음이 더 명확하게 들립니다.
+          </p>
         </div>
       </div>
     </div>
