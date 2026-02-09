@@ -20,7 +20,7 @@ export default function DayCounter({ date, day }: DayCounterProps) {
           
           {/* 🔊 안내 문구 */}
           <p className="mt-1 text-xs sm:text-sm text-gray-500">
-            🔊 PC에서 접속하면 발음이 더 명확하게 들립니다.
+           🔊 모바일 환경에서는 발음이 다소 부자연스러울 수 있습니다. PC에서 접속하면 더 또렷한 발음을 들을 수 있어요.
           </p>
         </div>
       </div>
