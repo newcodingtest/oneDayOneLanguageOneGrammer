@@ -13,11 +13,6 @@ const [lesson, setLesson] = useState<GrammarLesson | null>(null);
     async function fetchLesson() {
       try {
         const res = await fetch("/api/grammar");
-        if (!res.ok) {
-          const text = await res.text();
-          console.error("API returned non-JSON:", text);
-          return;
-        }
         const data: GrammarLesson = await res.json();
         setLesson(data);
       } catch (err) {
