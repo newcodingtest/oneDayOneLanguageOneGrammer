@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "나의 오늘의 문장",
     description: "매일매일 영어 한 문장씩 공부해요!",
-    url: "https://daliy-english-sentence.vercel.app/", // 배포된 실제 주소
+    url: "https://daily-english-sentence.vercel.app/", // 배포된 실제 주소
     siteName: "OneDay-OneGrammar",
     images: [
       {
@@ -71,10 +71,10 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "WebSite", 
               "name": "하루 한번 영어",
-              "url": "https://daliy-english-sentence.vercel.app/",
+              "url": "https://daily-english-sentence.vercel.app/",
               "potentialAction": {
                 "@type": "SearchAction",
-                "target": "https://daliy-english-sentence.vercel.app/search?q={search_term_string}",
+                "target": "https://daily-english-sentence.vercel.app/search?q={search_term_string}",
                 "query-input": "required name=search_term_string"
               }
             }),
