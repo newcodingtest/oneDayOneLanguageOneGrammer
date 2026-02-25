@@ -51,7 +51,7 @@ async function generateAndPersist(year: number, month: number, day: number) {
   const grammarData = JSON.parse(cleanContent);
 
   // ✅ 캐시 미스(처음 생성)일 때만 저장되도록 이 함수 안에서 저장
-  await supabaseService.save(cleanContent);
+  //await supabaseService.save(cleanContent);
 
   return grammarData;
 }
