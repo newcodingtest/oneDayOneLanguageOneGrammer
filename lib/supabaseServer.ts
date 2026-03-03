@@ -1,11 +1,17 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY!;
+const getSupabaseAdmin = () => {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY;
 
-export const supabaseAdmin = createClient(supabaseUrl, supabaseKey, {
-  auth: {
-    persistSession: false, // 서버에서는 세션 유지가 필요 없으므로 false
-    autoRefreshToken: false,
-  },
-})
+  if (!url || !key) {
+    console.error("❌ 현재 환경 변수 상태:", { url, key });
+    throw new Error("Supabase 환경 변수가 없습니다. .env 파일을 확인하세요.");
+  }
+
+  return createClient(url, key, {
+    auth: { persistSession: false, autoRefreshToken: false },
+  });
+};
+
+export const supabaseAdmin = getSupabaseAdmin();
