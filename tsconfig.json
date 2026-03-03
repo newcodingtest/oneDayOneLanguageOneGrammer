@@ -38,6 +38,6 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-  ],
+, "repository/grammarRepository.ts.test"  ],
   "exclude": ["node_modules"]
 }

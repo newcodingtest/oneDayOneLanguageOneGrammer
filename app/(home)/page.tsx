@@ -12,7 +12,7 @@ const [lesson, setLesson] = useState<GrammarLesson | null>(null);
  useEffect(() => {
     async function fetchLesson() {
       try {
-        const res = await fetch("/api/grammar");
+        const res = await fetch("/api/grammar/today");
         const data: GrammarLesson = await res.json();
         setLesson(data);
       } catch (err) {
