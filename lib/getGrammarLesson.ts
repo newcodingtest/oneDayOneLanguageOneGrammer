@@ -42,6 +42,7 @@ async function generateAndPersist(year: number, month: number, day: number) {
   const isProd = process.env.DEPLOY_LEVEL === "prod";
   const prompt = ENGLISH_LEARNING_PROMPT(year, month, day);
 
+  console.log(`prompt: ${prompt}`);
   const raw =
     isProd
       ? await askGemini(prompt)
