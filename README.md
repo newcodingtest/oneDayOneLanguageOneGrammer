@@ -4,6 +4,9 @@ Next.js + TypeScript 기반의 **AI 자동 생성** 영어 문법 학습 웹 애
 <Br>
 주소: https://daliy-english-sentence.vercel.app/
 
+<img width="687" height="387" alt="image" src="https://github.com/user-attachments/assets/754a3cf5-fc40-475d-a25a-9bd4b0862799" />
+
+
 ## 주요 기능
 
 ✨ **AI가 매일 새로운 문법을 생성합니다**
