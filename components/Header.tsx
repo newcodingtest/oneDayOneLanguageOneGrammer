@@ -27,7 +27,7 @@ export default function Header() {
         <nav className="flex items-center gap-2 sm:gap-4 text-sm sm:text-base font-medium">
 
           <Link
-            href="/daily-grammar"
+            href="/"
             className={`px-3 py-1.5 rounded-md transition ${
               isGrammar
                 ? "text-blue-600 bg-blue-50"
