@@ -25,9 +25,11 @@ const [lesson, setLesson] = useState<GrammarLesson | null>(null);
   if (!lesson) return <div>Loading...</div>;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
+<div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
       <Header />
+      {/* 본문 */}
       <GrammarContentClient lesson={lesson} />
+
       <Footer />
     </div>
   );

@@ -1,17 +1,54 @@
 // components/Header.tsx
+"use client";
 
+import Link from 'next/link';
 import { BookOpen } from './icons';
+import { usePathname } from 'next/navigation';
 
 export default function Header() {
+  const pathname = usePathname();
+
+  const isGrammar = pathname === "/";
+  const isPhrasal = pathname === "/oldverb";
+
   return (
     <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6 py-3 sm:py-4 flex items-center justify-between">
+
+        {/* 좌측 로고 */}
         <div className="flex items-center gap-2 sm:gap-3">
           <BookOpen className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-blue-600 flex-shrink-0" />
           <h1 className="text-base sm:text-xl lg:text-2xl font-bold text-gray-800 truncate">
             하루 영어문법 1개
           </h1>
         </div>
+
+        {/* 🔥 우측 네비게이션 */}
+        <nav className="flex items-center gap-2 sm:gap-4 text-sm sm:text-base font-medium">
+
+          <Link
+            href="/daily-grammar"
+            className={`px-3 py-1.5 rounded-md transition ${
+              isGrammar
+                ? "text-blue-600 bg-blue-50"
+                : "text-gray-500 hover:text-gray-800"
+            }`}
+          >
+            문법
+          </Link>
+
+          <Link
+            href="/oldverb"
+            className={`px-3 py-1.5 rounded-md transition ${
+              isPhrasal
+                ? "text-blue-600 bg-blue-50"
+                : "text-gray-500 hover:text-gray-800"
+            }`}
+          >
+            구동사
+          </Link>
+
+        </nav>
       </div>
     </header>
   );

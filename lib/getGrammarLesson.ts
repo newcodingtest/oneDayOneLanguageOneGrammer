@@ -1,12 +1,12 @@
 // lib/grammar/getGrammarLesson.ts
-import { ENGLISH_LEARNING_PROMPT } from "@/lib/prompts";
+import { ENGLISH_LEARNING_PROMPT, OLD_VERB_PROMPT } from "@/lib/prompts";
 import { getSampleLesson } from "@/mocks/grammar";
 import { grammarRepository } from "@/repository/grammarRepository";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { unstable_cache } from "next/cache";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
-
+const genAIV1 = new GoogleGenerativeAI(process.env.GEMINI_API_KEY_V1 || "");
 function secondsUntilNextMidnightKST() {
   const now = new Date();
   const utcMs = now.getTime() + now.getTimezoneOffset() * 60_000;
@@ -26,6 +26,21 @@ async function askGemini(prompt: string) {
     generationConfig: {
       responseMimeType: "application/json",
       maxOutputTokens: 2000,
+    },
+  });
+
+  const result = await model.generateContent(prompt);
+  const response = await result.response;
+  return response.text();
+}
+
+async function askGeminiV1(prompt: string) {
+  console.log("V1 잼미니 물어봐~")
+  const model = genAIV1.getGenerativeModel({
+    model: process.env.GEMINI_MODEL as string,
+    generationConfig: {
+      responseMimeType: "application/json",
+      maxOutputTokens: 4000,
     },
   });
 
@@ -57,6 +72,27 @@ async function generateAndPersist(year: number, month: number, day: number) {
   return grammarData;
 }
 
+async function generateAndPersistV1(year: number, month: number, day: number) {
+  const isProd = process.env.DEPLOY_LEVEL === "prod";
+  const prompt = OLD_VERB_PROMPT(year, month, day);
+
+  //console.log(`prompt: ${prompt}`);
+  const raw =
+    isProd
+      ? await askGeminiV1(prompt)
+      : JSON.stringify(getSampleLesson(year, month, day));
+  console.log(`v1 raw: ${raw} \n\n`)
+  
+  const cleanContent = cleanJson(raw);
+  console.log(`V1 cleanContent: ${cleanContent}`);
+  //const grammarData = JSON.parse(cleanContent);
+
+  // ✅ 캐시 미스(처음 생성)일 때만 저장되도록 이 함수 안에서 저장
+  await grammarRepository.save(cleanContent);
+
+  return cleanContent;
+}
+
 export async function getGrammarLesson(year: number, month: number, day: number) {
   const revalidate = secondsUntilNextMidnightKST();
   const key = [`grammar-${year}-${month}-${day}`];
@@ -69,4 +105,18 @@ export async function getGrammarLesson(year: number, month: number, day: number)
 
   return cached();
 }
+
+export async function getGrammarLessonV1(year: number, month: number, day: number) {
+  const revalidate = secondsUntilNextMidnightKST();
+  const key = [`grammar-v1-${year}-${month}-${day}`];
+
+  const cached = unstable_cache(
+    () => generateAndPersistV1(year, month, day),
+    key,
+    { revalidate, tags: ["grammar", `grammar-v1-${year}-${month}-${day}`] }
+  );
+
+  return cached();
+}
+
 
