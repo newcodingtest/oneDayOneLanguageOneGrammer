@@ -108,12 +108,12 @@ export async function getGrammarLesson(year: number, month: number, day: number)
 
 export async function getGrammarLessonV1(year: number, month: number, day: number) {
   const revalidate = secondsUntilNextMidnightKST();
-  const key = [`grammar-v1-${year}-${month}-${day}`];
+  const key = [`phrasal-verb-${year}-${month}-${day}`];
 
   const cached = unstable_cache(
     () => generateAndPersistV1(year, month, day),
     key,
-    { revalidate, tags: ["grammar", `grammar-v1-${year}-${month}-${day}`] }
+    { revalidate, tags: ["phrasal-verb", `phrasal-verb-${year}-${month}-${day}`] }
   );
 
   return cached();
