@@ -1,4 +1,5 @@
 import { GrammarLesson } from "@/types/grammer";
+import { SlangLesson } from "@/types/slang";
 
 export const getSampleLesson = (years: number, month: number, day: number): GrammarLesson => ({
     date: `${years}년 ${month}월 ${day}일`,
@@ -31,3 +32,65 @@ export const getSampleLesson = (years: number, month: number, day: number): Gram
       }
     ]
   });
+
+  export const getSampleSLANG = (years: number, month: number, day: number): SlangLesson  => ({
+  "seriesTitle": "오늘의 슬랭 뿌시기",
+  "level": "intermediate",
+  "description": "원어민이 실제로 자주 쓰는 영어 슬랭 표현 모음",
+  "items": [
+    {
+      "category": "반응",
+      "slang": "no cap",
+      "pronunciation": "노 캡",
+      "meaning": [
+        "진심으로",
+        "거짓말 안 하고",
+        "진짜로"
+      ],
+      "literalMeaning": "직역하면 '모자 없다'이지만 실제 뜻과는 다름",
+      "nuance": "강하게 진심을 강조할 때 쓰는 표현이다. 친구 사이에서 많이 쓰며, SNS나 영상 댓글에서도 자주 보인다.",
+      "tone": "internet",
+      "intensity": "medium",
+      "usage": {
+        "usedBy": "10대~30대가 온라인과 일상회화에서 자주 사용",
+        "online": "매우 자주 사용",
+        "offline": "친한 사이에서는 자주 사용",
+        "business": "비권장"
+      },
+      "examples": [
+        {
+          "english": "That food was amazing, no cap.",
+          "pronunciation": "댓 푸드 워즈 어메이징, 노 캡",
+          "korean": "그 음식 진짜 끝내줬어, 진심이야.",
+          "situation": "친구에게 음식이 정말 맛있었다고 강조하는 상황"
+        },
+        {
+          "english": "He is the best player on the team, no cap.",
+          "pronunciation": "히 이즈 더 베스트 플레이어 온 더 팀, 노 캡",
+          "korean": "걔가 팀에서 제일 잘해, 진짜로.",
+          "situation": "누군가를 강하게 칭찬하는 상황"
+        }
+      ],
+      "alternatives": [
+        {
+          "expression": "for real",
+          "pronunciation": "포 리얼",
+          "tone": "좀 더 무난한 회화체",
+          "note": "비슷하게 진심을 강조하지만 no cap보다 덜 인터넷식이다."
+        },
+        {
+          "expression": "seriously",
+          "pronunciation": "시리어슬리",
+          "tone": "더 일반적이고 안전한 표현",
+          "note": "슬랭 느낌 없이도 비슷한 의미를 전달할 수 있다."
+        }
+      ],
+      "caution": "공식 발표, 면접, 회사 메일에서는 쓰지 않는 것이 좋다.",
+      "culturalNote": "미국 젊은 층과 SNS 문화에서 익숙한 표현이지만, 세대 차이에 따라 다소 유행어처럼 들릴 수 있다.",
+      "quiz": {
+        "question": "‘진짜로, 거짓말 안 하고’라는 뜻으로 쓰이는 slang은?",
+        "answer": "no cap"
+      }
+    }
+  ]
+});

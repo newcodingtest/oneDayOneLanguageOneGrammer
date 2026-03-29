@@ -10,6 +10,7 @@ export default function Header() {
 
   const isGrammar = pathname === "/";
   const isPhrasal = pathname === "/oldverb";
+  const isSlang = pathname === "/slang";
 
   return (
     <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
@@ -46,6 +47,17 @@ export default function Header() {
             }`}
           >
             구동사
+          </Link>
+
+           <Link
+            href="/slang"
+            className={`px-3 py-1.5 rounded-md transition ${
+              isPhrasal
+                ? "text-blue-600 bg-blue-50"
+                : "text-gray-500 hover:text-gray-800"
+            }`}
+          >
+            Slang
           </Link>
 
         </nav>

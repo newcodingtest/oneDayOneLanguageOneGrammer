@@ -270,3 +270,94 @@ return `당신은 한국인을 위한 영어 학습 콘텐츠 제작자다.
 11. 해석은 번역투 금지
 12. JSON 외 텍스트 절대 출력 금지`
 };
+
+
+
+export const SLANG_PROMPT = (years: number, month: number, day: number) => {
+  
+return `너는 영어 교육용 콘텐츠를 만드는 원어민 감각의 영어 선생님이다.
+목표는 한국인 학습자가 실제 원어민이 자주 쓰는 slang 표현을 자연스럽게 익히도록 돕는 것이다.
+
+반드시 아래 JSON 형식만 반환해라.
+설명 문장, 마크다운, 코드블록, 부가 텍스트는 절대 포함하지 마라.
+
+조건:
+1. 결과는 영어 slang 표현 5개를 만든다.
+2. 너무 저속하거나 욕설에 가까운 표현은 제외한다.
+3. 실제 회화, SNS, 유튜브, 드라마 등에서 볼 수 있는 표현 위주로 만든다.
+4. 한국인 학습자가 이해하기 쉽게 의미와 뉘앙스를 자세히 설명한다.
+5. business 항목에는 비즈니스 상황에서 사용 적절성을 "거의 사용 안 함", "비권장", "제한적으로 가능" 중 하나로 작성한다.
+6. tone 은 casual, friendly, playful, rude, strong, internet 중 하나만 사용한다.
+7. intensity 는 low, medium, high 중 하나만 사용한다.
+8. examples 는 각 slang마다 2개 이상 작성한다.
+9. alternatives 는 각 slang마다 2개 이상 작성한다.
+10. pronunciation 은 한국어 발음 표기처럼 적는다.
+11. situation 필드에는 해당 예문이 쓰이는 상황을 한국어로 설명한다.
+12. culturalNote 에는 미국/영어권에서 어떤 느낌으로 받아들여지는지 설명한다.
+13. caution 에는 언제 쓰면 어색하거나 실례가 될 수 있는지 적는다.
+14. category 는 예: 감탄, 칭찬, 반응, 인터넷, 일상회화, 친구사이, 거절, 놀람 등으로 작성한다.
+15. meaning 은 문자열 배열로 작성한다.
+
+반환 JSON 형식:
+{
+  "seriesTitle": "오늘의 슬랭 뿌시기",
+  "level": "intermediate",
+  "description": "원어민이 실제로 자주 쓰는 영어 슬랭 표현 모음",
+  "items": [
+    {
+      "category": "반응",
+      "slang": "no cap",
+      "pronunciation": "노 캡",
+      "meaning": [
+        "진심으로",
+        "거짓말 안 하고",
+        "진짜로"
+      ],
+      "literalMeaning": "직역하면 '모자 없다'이지만 실제 뜻과는 다름",
+      "nuance": "강하게 진심을 강조할 때 쓰는 표현이다. 친구 사이에서 많이 쓰며, SNS나 영상 댓글에서도 자주 보인다.",
+      "tone": "internet",
+      "intensity": "medium",
+      "usage": {
+        "usedBy": "10대~30대가 온라인과 일상회화에서 자주 사용",
+        "online": "매우 자주 사용",
+        "offline": "친한 사이에서는 자주 사용",
+        "business": "비권장"
+      },
+      "examples": [
+        {
+          "english": "That food was amazing, no cap.",
+          "pronunciation": "댓 푸드 워즈 어메이징, 노 캡",
+          "korean": "그 음식 진짜 끝내줬어, 진심이야.",
+          "situation": "친구에게 음식이 정말 맛있었다고 강조하는 상황"
+        },
+        {
+          "english": "He is the best player on the team, no cap.",
+          "pronunciation": "히 이즈 더 베스트 플레이어 온 더 팀, 노 캡",
+          "korean": "걔가 팀에서 제일 잘해, 진짜로.",
+          "situation": "누군가를 강하게 칭찬하는 상황"
+        }
+      ],
+      "alternatives": [
+        {
+          "expression": "for real",
+          "pronunciation": "포 리얼",
+          "tone": "좀 더 무난한 회화체",
+          "note": "비슷하게 진심을 강조하지만 no cap보다 덜 인터넷식이다."
+        },
+        {
+          "expression": "seriously",
+          "pronunciation": "시리어슬리",
+          "tone": "더 일반적이고 안전한 표현",
+          "note": "슬랭 느낌 없이도 비슷한 의미를 전달할 수 있다."
+        }
+      ],
+      "caution": "공식 발표, 면접, 회사 메일에서는 쓰지 않는 것이 좋다.",
+      "culturalNote": "미국 젊은 층과 SNS 문화에서 익숙한 표현이지만, 세대 차이에 따라 다소 유행어처럼 들릴 수 있다.",
+      "quiz": {
+        "question": "‘진짜로, 거짓말 안 하고’라는 뜻으로 쓰이는 slang은?",
+        "answer": "no cap"
+      }
+    }
+  ]
+}`
+};
