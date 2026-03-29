@@ -52,7 +52,7 @@ export default function Header() {
            <Link
             href="/slang"
             className={`px-3 py-1.5 rounded-md transition ${
-              isPhrasal
+              isSlang
                 ? "text-blue-600 bg-blue-50"
                 : "text-gray-500 hover:text-gray-800"
             }`}
