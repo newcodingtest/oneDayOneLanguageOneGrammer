@@ -164,7 +164,7 @@ export async function getSlang(year: number, month: number, day: number) {
   const cached = unstable_cache(
     () => generateAndPersistSLANG(year, month, day),
     key,
-    { revalidate, tags: ["pslang", `slang-${year}-${month}-${day}`] }
+    { revalidate, tags: ["slang", `slang-${year}-${month}-${day}`] }
   );
 
   return cached();
