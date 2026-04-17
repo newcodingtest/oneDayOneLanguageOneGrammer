@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
     console.log(`🔥 slang prewarm 시작: ${year}-${month}-${day}`);
 
     const lesson = await getSlang(year, month, day);
-    await grammarRepository.save(lesson);
+    await grammarRepository.saveSlang(lesson);
     
     return NextResponse.json({
       ok: true,

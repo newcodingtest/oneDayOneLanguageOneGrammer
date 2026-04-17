@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
     console.log(`🔥 prewarm 시작: ${year}-${month}-${day}`);
 
     const lesson = await getGrammarLessonV1(year, month, day);
-    await grammarRepository.save(lesson);
+    await grammarRepository.saveOldVerb(lesson);
     return NextResponse.json({
       ok: true,
       target: `${year}-${month}-${day}`,
