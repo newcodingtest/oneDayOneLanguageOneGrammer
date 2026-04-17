@@ -2,12 +2,12 @@
   "crons": [
     {
       "path": "/api/prewarm",
-      "schedule": "55 14 * * *"
+      "schedule": "51 14 * * *"
     },
 
     {
       "path": "/api/grammar",
-      "schedule": "55 14 * * *"
+      "schedule": "53 14 * * *"
     },
     
     {
