@@ -83,9 +83,6 @@ async function generateAndPersist(year: number, month: number, day: number) {
   const cleanContent = cleanJson(raw);
   const grammarData = JSON.parse(cleanContent);
 
-  // ✅ 캐시 미스(처음 생성)일 때만 저장되도록 이 함수 안에서 저장
-  await grammarRepository.save(cleanContent);
-
   return grammarData;
 }
 
@@ -104,9 +101,6 @@ async function generateAndPersistV1(year: number, month: number, day: number) {
   console.log(`V1 cleanContent: ${cleanContent}`);
   //const grammarData = JSON.parse(cleanContent);
 
-  // ✅ 캐시 미스(처음 생성)일 때만 저장되도록 이 함수 안에서 저장
-  await grammarRepository.save(cleanContent);
-
   return cleanContent;
 }
 
@@ -123,11 +117,7 @@ async function generateAndPersistSLANG(year: number, month: number, day: number)
   
   const cleanContent = cleanJson(raw);
   console.log(`slang cleanContent: ${cleanContent}`);
-  //const grammarData = JSON.parse(cleanContent);
-
-  // ✅ 캐시 미스(처음 생성)일 때만 저장되도록 이 함수 안에서 저장
-  await grammarRepository.save(cleanContent);
-
+ 
   return cleanContent;
 }
 

@@ -1,4 +1,5 @@
 import { getGrammarLesson } from "@/lib/getGrammarLesson";
+import { grammarRepository } from "@/repository/grammarRepository";
 import { NextResponse } from "next/server";
 
 
@@ -12,7 +13,7 @@ export async function GET() {
     const day = kst.getUTCDate();
 
     const lesson = await getGrammarLesson(year, month, day);
-
+    await grammarRepository.save(lesson);
     console.log("API 응답 성공:", lesson);
     return NextResponse.json(lesson);
   } catch (err) {
