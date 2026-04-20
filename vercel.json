@@ -13,6 +13,11 @@
     {
       "path": "/api/slang",
       "schedule": "55 14 * * *"
+    },
+    
+    {
+      "path": "/api/mistake",
+      "schedule": "57 14 * * *"
     }
   ]
 }

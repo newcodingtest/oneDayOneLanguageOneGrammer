@@ -1,4 +1,5 @@
 import { GrammarLesson } from "@/types/grammer";
+import { MistakeItem, MistakeLesson } from "@/types/mistake";
 import { SlangLesson } from "@/types/slang";
 
 export const getSampleLesson = (years: number, month: number, day: number): GrammarLesson => ({
@@ -94,3 +95,40 @@ export const getSampleLesson = (years: number, month: number, day: number): Gram
     }
   ]
 });
+
+  export const getSampleMistake = (years: number, month: number, day: number): MistakeLesson  => (
+    {
+      "date": "2026-4-20",
+      "topic": "직역해서 틀리는 영어 (한국식 사고)",
+      "items": [
+        {
+          "wrong": "I am boring.",
+          "correct": "I am bored.",
+          "reason": "한국어로는 '나 지루해'라고 말하니까 boring을 바로 붙이기 쉽다. 그런데 영어에서 boring은 '지루하게 만드는' 쪽이고, bored가 '지루함을 느끼는' 쪽이다.",
+          "nuance": "I am boring.이라고 하면 원어민은 '나는 재미없는 사람이야' 또는 '내가 사람들을 지루하게 해'라는 뜻으로 받아들인다.",
+          "exampleWrong": "This movie is so long. I am boring.",
+          "exampleCorrect": "This movie is so long. I am bored.",
+          "tip": "-ing는 감정을 주는 쪽, -ed는 감정을 느끼는 쪽이라고 기억하면 쉽다."
+        },
+        {
+          "wrong": "I and my friend went there.",
+          "correct": "My friend and I went there.",
+          "reason": "한국어 어순 그대로 '나와 내 친구'라고 생각해서 I를 먼저 쓰는 경우가 많다. 하지만 영어에서는 보통 상대를 먼저 말하고 자신을 뒤에 둔다.",
+          "nuance": "문법적으로 아주 크게 틀렸다고 느끼지 않을 수도 있지만, 원어민 입장에서는 어색하고 덜 자연스럽게 들린다. 특히 기본 회화에서 티가 난다.",
+          "exampleWrong": "I and my friend are going to Hongdae tonight.",
+          "exampleCorrect": "My friend and I are going to Hongdae tonight.",
+          "tip": "영어에서는 '상대 먼저, 나중에 나' 패턴을 습관처럼 가져가면 된다."
+        },
+        {
+          "wrong": "I ate medicine.",
+          "correct": "I took medicine.",
+          "reason": "한국어에서는 약을 '먹다'라고 하니까 eat를 그대로 떠올리기 쉽다. 하지만 영어에서는 약은 보통 take를 쓴다.",
+          "nuance": "I ate medicine.도 의미는 전달될 수 있지만 아주 한국식 영어 느낌이 난다. 원어민은 바로 '아, 직역했구나'라고 느낄 수 있다.",
+          "exampleWrong": "Wait, I need to eat medicine first.",
+          "exampleCorrect": "Wait, I need to take my medicine first.",
+          "tip": "음식은 eat, 약은 take로 묶어서 외우면 잘 안 틀린다."
+        }
+      ]
+    }
+
+);
