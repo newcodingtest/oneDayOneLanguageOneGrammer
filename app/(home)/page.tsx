@@ -13,9 +13,9 @@ export default async function DailyGrammarPage() {
   
     const start = Date.now();
   
-    const lesson: GrammarLesson = await getGrammarLesson(year, month, day);
-
-  
+    const rawLesson = await getGrammarLesson(year, month, day);
+  const lesson: GrammarLesson =
+    typeof rawLesson === "string" ? JSON.parse(rawLesson) : rawLesson;
     const end = Date.now();
   
     console.log("구동사 정보:", lesson);
