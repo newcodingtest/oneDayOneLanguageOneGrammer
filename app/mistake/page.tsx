@@ -1,7 +1,7 @@
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { getKstToday } from "@/lib/date/kst";
-import { getMistake } from "@/lib/getGrammarLesson";
+import { getContent } from "@/modules/content/content.service";
 import { MistakeLesson } from "@/types/mistake";
 
 export default async function MistakePage() {
@@ -11,7 +11,12 @@ export default async function MistakePage() {
 
   const start = Date.now();
 
-  const rawLesson = await getMistake(year, month, day);
+  const rawLesson =  await getContent(
+                  "mistake",
+                  year,
+                  month + 1,
+                  day
+      );
   const lesson: MistakeLesson =
     typeof rawLesson === "string" ? JSON.parse(rawLesson) : rawLesson;
 

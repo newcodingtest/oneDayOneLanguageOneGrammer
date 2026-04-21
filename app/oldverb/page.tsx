@@ -3,6 +3,7 @@ import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { getGrammarLessonV1 } from "@/lib/getGrammarLesson";
 import { getKstToday } from "@/lib/date/kst";
+import { getContent } from "@/modules/content/content.service";
 
 interface PhrasalVerbExample {
   english: string;
@@ -48,7 +49,12 @@ export default async function TestGrammarPage() {
 
   const start = Date.now();
 
-  const rawLesson = await getGrammarLessonV1(year, month, day);
+  const rawLesson = await getContent(
+                    "phrasal",
+                    year,
+                    month + 1,
+                    day
+        );
   const lesson: PhrasalVerbLesson =
     typeof rawLesson === "string" ? JSON.parse(rawLesson) : rawLesson;
 

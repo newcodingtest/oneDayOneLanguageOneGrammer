@@ -1,9 +1,9 @@
 // app/slang/page.tsx
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
-import { getSlang } from "@/lib/getGrammarLesson";
 import { getKstToday } from "@/lib/date/kst";
 import { SlangItem, SlangLesson } from "@/types/slang";
+import { getContent } from "@/modules/content/content.service";
 
 const toneBadgeMap: Record<SlangItem["tone"], string> = {
   casual: "😎 캐주얼",
@@ -26,7 +26,12 @@ export default async function SlangPage() {
   const { year, month, day } = getKstToday();
   const start = Date.now();
 
-  const rawLesson = await getSlang(year, month, day);
+  const rawLesson = await getContent(
+                      "slang",
+                      year,
+                      month + 1,
+                      day
+          );
   const lesson: SlangLesson =
     typeof rawLesson === "string" ? JSON.parse(rawLesson) : rawLesson;
 

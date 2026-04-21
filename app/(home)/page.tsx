@@ -4,7 +4,7 @@ import Footer from '@/components/Footer';
 import GrammarContentClient from '@/components/GrammarContentClient'; // 새로 만들 파일
 import Header from '@/components/Header';
 import { getKstToday } from '@/lib/date/kst';
-import { getGrammarLesson } from '@/lib/getGrammarLesson';
+import { getContent } from '@/modules/content/content.service';
 import { GrammarLesson } from '@/types/grammer';
 
 export default async function DailyGrammarPage() {
@@ -13,7 +13,12 @@ export default async function DailyGrammarPage() {
   
     const start = Date.now();
   
-    const rawLesson = await getGrammarLesson(year, month, day);
+    const rawLesson = await getContent(
+                    "grammar",
+                    year,
+                    month,
+                    day
+        );
   const lesson: GrammarLesson =
     typeof rawLesson === "string" ? JSON.parse(rawLesson) : rawLesson;
     const end = Date.now();

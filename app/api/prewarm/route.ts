@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import {getGrammarLessonV1 } from "@/lib/getGrammarLesson";
 import { getKstTomorrow } from "@/lib/date/kst";
 import { grammarRepository } from "@/repository/grammarRepository";
+import { getContent } from "@/modules/content/content.service";
 
 export async function GET(request: NextRequest) {
   try {
@@ -11,7 +12,12 @@ export async function GET(request: NextRequest) {
 
     console.log(`🔥 prewarm 시작: ${year}-${month}-${day}`);
 
-    const lesson = await getGrammarLessonV1(year, month, day);
+    const lesson = await getContent(
+                        "phrasal",
+                        year,
+                        month + 1,
+                        day
+            );
     await grammarRepository.saveOldVerb(lesson);
     return NextResponse.json({
       ok: true,
