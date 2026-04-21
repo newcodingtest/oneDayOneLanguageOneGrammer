@@ -90,33 +90,28 @@ async function generateAndPersist(year: number, month: number, day: number) {
   const isProd = process.env.DEPLOY_LEVEL === "prod";
   const prompt = ENGLISH_LEARNING_PROMPT(year, month, day);
 
-  console.log(`prompt: ${prompt}`);
   const raw =
     isProd
       ? await askGemini(prompt)
       : JSON.stringify(getSampleLesson(year, month, day));
 
+  console.log(`Grammar: ${raw}`);
   const cleanContent = cleanJson(raw);
-  const grammarData = JSON.parse(cleanContent);
 
-  return grammarData;
+  return cleanContent;
 }
 
 async function generateAndPersistV1(year: number, month: number, day: number) {
   const isProd = process.env.DEPLOY_LEVEL === "prod";
   const prompt = OLD_VERB_PROMPT(year, month, day);
 
-  //console.log(`prompt: ${prompt}`);
   const raw =
     isProd
       ? await askGeminiV1(prompt)
       : JSON.stringify(getGrammarLessonV1(year, month, day));
-  console.log(`v1 raw: ${raw} \n\n`)
   
+  console.log(`Old Verb: ${raw}`);
   const cleanContent = cleanJson(raw);
-  console.log(`V1 cleanContent: ${cleanContent}`);
-  //const grammarData = JSON.parse(cleanContent);
-
   return cleanContent;
 }
 
@@ -124,16 +119,13 @@ async function generateAndPersistSLANG(year: number, month: number, day: number)
   const isProd = process.env.DEPLOY_LEVEL === "prod";
   const prompt = SLANG_PROMPT(year, month, day);
 
-  //console.log(`prompt: ${prompt}`);
   const raw =
     isProd
       ? await askGeminiV2(prompt)
       : JSON.stringify(getSampleSLANG(year, month, day));
-  console.log(`slang raw: ${raw} \n\n`)
+  console.log(`SLANG: ${raw}`);
   
   const cleanContent = cleanJson(raw);
-  console.log(`slang cleanContent: ${cleanContent}`);
- 
   return cleanContent;
 }
 
@@ -141,15 +133,12 @@ async function generateAndPersistMistake(year: number, month: number, day: numbe
   const isProd = process.env.DEPLOY_LEVEL === "prod";
   const prompt = MISTAKE_PROMPT(year, month, day);
 
-  //console.log(`prompt: ${prompt}`);
   const raw =
     isProd
       ? await askGeminiV3(prompt)
       : JSON.stringify(getSampleMistake(year, month, day));
-  console.log(`slang raw: ${raw} \n\n`)
-  
+  console.log(`Mistake: ${raw}`);
   const cleanContent = cleanJson(raw);
-  console.log(`slang cleanContent: ${cleanContent}`);
  
   return cleanContent;
 }

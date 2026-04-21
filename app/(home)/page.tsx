@@ -7,36 +7,6 @@ import { getKstToday } from '@/lib/date/kst';
 import { getGrammarLesson } from '@/lib/getGrammarLesson';
 import { GrammarLesson } from '@/types/grammer';
 
-
-// export default function DailyGrammarPage() {
-// const [lesson, setLesson] = useState<GrammarLesson | null>(null);
-
-//  useEffect(() => {
-//     async function fetchLesson() {
-//       try {
-//         const res = await fetch("/api/grammar");
-//         const data: GrammarLesson = await res.json();
-//         setLesson(data);
-//       } catch (err) {
-//         console.error("Failed to fetch lesson:", err);
-//       }
-//     }
-//     fetchLesson();
-//   }, []);
-
-//   if (!lesson) return <div>Loading...</div>;
-
-//   return (
-// <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
-//       <Header />
-//       {/* 본문 */}
-//       <GrammarContentClient lesson={lesson} />
-
-//       <Footer />
-//     </div>
-//   );
-// }
-
 export default async function DailyGrammarPage() {
 
    const { year, month, day } = getKstToday();
