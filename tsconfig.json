@@ -9,7 +9,8 @@
       "@/lib/*": ["./lib/*"],
       "@/types/*": ["./types/*"],
       "@/mocks/*": ["./mocks/*"],
-      "@/service/*": ["./service/*"]
+      "@/service/*": ["./service/*"],
+      "@/modules/*": ["./modules/*"],
     },
 
     "target": "ES2017",

@@ -1,4 +1,3 @@
-//"use client"
 // app/daily-grammar/page.tsx
 import Footer from '@/components/Footer';
 import GrammarContentClient from '@/components/GrammarContentClient'; // 새로 만들 파일
