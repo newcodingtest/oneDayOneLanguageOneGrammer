@@ -1,7 +1,6 @@
 // app/test/page.tsx
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
-import { getGrammarLessonV1 } from "@/lib/getGrammarLesson";
 import { getKstToday } from "@/lib/date/kst";
 import { getContent } from "@/modules/content/content.service";
 
