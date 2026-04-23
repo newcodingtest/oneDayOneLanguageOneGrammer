@@ -2,22 +2,22 @@
   "crons": [
     {
       "path": "/api/prewarm",
-      "schedule": "51 14 * * *"
+      "schedule": "49 14 * * *"
     },
 
     {
       "path": "/api/grammar",
-      "schedule": "53 14 * * *"
+      "schedule": "51 14 * * *"
     },
     
     {
       "path": "/api/slang",
-      "schedule": "55 14 * * *"
+      "schedule": "53 14 * * *"
     },
     
     {
       "path": "/api/mistake",
-      "schedule": "57 14 * * *"
+      "schedule": "55 14 * * *"
     }
   ]
 }
