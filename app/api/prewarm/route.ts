@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import {getGrammarLessonV1 } from "@/lib/getGrammarLesson";
 import { getKstTomorrow } from "@/lib/date/kst";
 import { grammarRepository } from "@/repository/grammarRepository";
 import { getContent } from "@/modules/content/content.service";

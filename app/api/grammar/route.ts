@@ -1,8 +1,6 @@
-import { getGrammarLesson } from "@/lib/getGrammarLesson";
 import { getContent } from "@/modules/content/content.service";
 import { grammarRepository } from "@/repository/grammarRepository";
 import { NextResponse } from "next/server";
-
 
 export async function GET() {
   console.log("API 들어왔음");

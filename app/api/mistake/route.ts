@@ -1,4 +1,3 @@
-import { getMistake } from "@/lib/getGrammarLesson";
 import { getContent } from "@/modules/content/content.service";
 import { grammarRepository } from "@/repository/grammarRepository";
 import { NextResponse } from "next/server";
